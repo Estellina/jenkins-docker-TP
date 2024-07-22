@@ -9,9 +9,9 @@ pipeline {
                 bat 'docker build -t thecatalyst112/flaskapp:%BUILD_NUMBER% .'
             }
         }
-       stage('login to dockerhub') {
+        stage('login to dockerhub') {
             steps{
-                bat 'echo  Campusfrance1*  | docker login -u thecatalyst112 --password-stdin'
+                bat 'echo %DOCKERHUB_CREDENTIALS_PSW% | docker login -u %DOCKERHUB_CREDENTIALS_USR% --password-stdin'
             }
         }
         stage('Push image') {
