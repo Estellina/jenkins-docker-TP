@@ -7,17 +7,17 @@ pipeline {
 
         stage('Build docker image') {
             steps {  
-                bat 'docker build -t thecatalyst112/flask:$BUILD_NUMBER .'
+                bat 'docker build -t thecatalyst112/flask:%BUILD_NUMBER% .'
             }
         }
         stage('login to dockerhub') {
             steps{
-                bat 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                bat 'echo %DOCKERHUB_CREDENTIALS_PSW% | docker login -u %DOCKERHUB_CREDENTIALS_USR% --password-stdin'
             }
         }
         stage('push image') {
             steps{
-                bat 'docker push thecatalyst112/flask:$BUILD_NUMBER'
+                bat 'docker push thecatalyst112/flask:%BUILD_NUMBER%'
             }
         }
 }
