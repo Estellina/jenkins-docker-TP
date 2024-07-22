@@ -1,17 +1,21 @@
 pipeline {
-    agent any 
+    agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('estelle-dockerhub')
     }
-    stages { 
+    stages {
         stage('Build docker image') {
             steps {
                 bat 'docker build -t thecatalyst112/flaskapp:%BUILD_NUMBER% .'
             }
         }
-        stage('login to dockerhub') {
-            steps{
-                bat 'echo %DOCKERHUB_CREDENTIALS_PSW% | docker login -u %DOCKERHUB_CREDENTIALS_USR% --password-stdin'
+        stage('Login to DockerHub') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'estelle-dockerhub', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                        bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
+                    }
+                }
             }
         }
         stage('Push image') {
